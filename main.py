@@ -35,12 +35,12 @@ def get_driver(headless: bool = False):
 
 def crawl(by, query, url: str):
     driver = get_driver()
-    driver.get(url)
-    time.sleep(2)
+    try:
+        driver.get(url)
+    except:
+        print("Failed to connect to URL:", url)
+        return []
     ret = preprocess(driver.find_elements(by, query))
-    time.sleep(2)
-    driver.quit()
-
     return ret
 
 
