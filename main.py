@@ -1,8 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 
@@ -11,7 +9,6 @@ class DriverSingleton:
 
     def __new__(cls, headless: bool = False):
         if cls._instance is None:
-            chrome_driver_manager = ChromeDriverManager().install()
             if headless:
                 headlessoptions = webdriver.ChromeOptions()
                 headlessoptions.add_argument('headless')
@@ -20,11 +17,9 @@ class DriverSingleton:
                 agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
                 headlessoptions.add_argument(agent)
                 headlessoptions.add_argument('lang=ko_KR')
-                driver = webdriver.Chrome(
-                    options=headlessoptions, service=Service(chrome_driver_manager))
+                driver = webdriver.Chrome(options=headlessoptions)
             else:
-                driver = webdriver.Chrome(
-                    service=Service(chrome_driver_manager))
+                driver = webdriver.Chrome()
             cls._instance = driver
         return cls._instance
 
