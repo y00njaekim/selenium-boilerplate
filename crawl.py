@@ -22,11 +22,12 @@ class DriverSingleton:
 
 
 class WebCrawler:
-    def __init__(self):
+    def __init__(self, headless=False):
+        self.headless = headless
         self.driver = self.get_driver()
 
-    def get_driver(self, headless: bool = False):
-        return DriverSingleton(headless)
+    def get_driver(self):
+        return DriverSingleton(self.headless)
 
     def get_url(self, url):
         try:
@@ -35,6 +36,16 @@ class WebCrawler:
             print("URL 연결 실패: ", url)
             print("오류: ", e)
             return []
+
+    def get_scroll_height(self):
+        return self.driver.execute_script(
+            "return document.documentElement.scrollHeight"
+        )
+
+    def scroll_to_bottom(self):
+        self.driver.execute_script(
+            "window.scrollTo(0, document.documentElement.scrollHeight);"
+        )
 
     def crawl_item(self, by, query, is_preprocess=False):
         if is_preprocess:
